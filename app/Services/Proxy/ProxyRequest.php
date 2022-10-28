@@ -2,6 +2,8 @@
 
 namespace App\Services\Proxy;
 
+use Illuminate\Support\Facades\Log;
+
 /**
  * Class give the ability to get any supplied uri header after crawling
  *
@@ -19,32 +21,39 @@ class ProxyRequest
      * The Functionality to perform the Request to crawl the provided url.
      *
      * @param string|null $url
-     * @return string|void
+     * @return array
      */
-    public function getHeaderFrom(?string $url)
+    public function getResponseFromRequest(?string $url): array
     {
         $proxies = $this->proxyLocator->getProxyScrape();
-        $response = '';
+        // There is possibility there might be more than one proxy
+        // we create a response array to keep their curl results.
+        $response = [];
 
         if (!empty($proxies)) {
-            foreach ($proxies as $proxy) {
+            foreach ($proxies as $key => $proxy) {
                 $curl = curl_init($url);
 
                 curl_setopt($curl, CURLOPT_HEADER, 1);
                 curl_setopt($curl, CURLOPT_PROXY, $proxy);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-                $response = curl_exec($curl);
-
+                curl_exec($curl);
+                $result = curl_exec($curl);
+                $error = curl_error($curl);
                 curl_close($curl);
 
-                if (!empty($error)) {
-                    echo $error . ' with error code: ' . curl_errno($curl);
+                $response[] = $result;
+                if ($result) {
+                    if (!empty($error)) {
+                        Log::error($error);
+                        echo $key . ' with error code: ' . curl_errno($curl) . "\r\n";
+                    }
                 }
-            }
+                continue;
 
-            $parts = explode("\r\n\r\n", $response, 2);
-            return $parts[0];
+            }
+            return $response;
         }
     }
 }

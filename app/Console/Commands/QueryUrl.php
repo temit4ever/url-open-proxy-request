@@ -21,15 +21,19 @@ class QueryUrl extends Command
     public function handle()
     {
         $url = $this->argument('url');
-        $header = $this->proxyRequest->getHeaderFrom($url);
+        $responses = $this->proxyRequest->getResponseFromRequest($url);
 
-        // Output HTTP headers.
-        $this->line($header);
+        foreach ($responses as $response) {
+            if ($response) {
+                $parts = explode("\r\n\r\n", $response, 2);
+                $header = $parts[0];
+                $this->line($header);
 
-        // Log this request.
-        $now = date('d/m/Y H:i:s');
-
-        file_put_contents(storage_path() . '/logs/results.log', "{$now}: {$url}\r\n", FILE_APPEND);
+                // Log this request.
+                $now = date('d/m/Y H:i:s');
+                file_put_contents(storage_path() . '/logs/results.log', "{$now}: {$url}\r\n", FILE_APPEND);
+            }
+        }
 
         return 0;
     }

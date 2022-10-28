@@ -20,9 +20,10 @@ class proxyTest extends TestCase
             $mock->shouldReceive('getProxyScrape')
         ));
 
-        $expected = app(ProxyRequest::class)->getHeaderFrom('https://www.google.co.uk/');
+        $expected = app(ProxyRequest::class)
+            ->getResponseFromRequest(' https://www.goal.com/en-gb/');
 
         $this->assertNotNull($expected);
-        $this->assertIsString($expected);
+        $this->assertIsArray($expected);
     }
 }

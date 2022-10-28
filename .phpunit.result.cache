@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"Tests\\Unit\\ExampleTest::test_example":0.022,"Tests\\Feature\\Proxy\\proxyTest::test_can_make_request_to_given_uri":3.856}}
+{"version":1,"defects":{"Tests\\Feature\\Proxy\\proxyTest::test_can_make_request_to_given_uri":3},"times":{"Tests\\Unit\\ExampleTest::test_example":0.006,"Tests\\Feature\\Proxy\\proxyTest::test_can_make_request_to_given_uri":0.467}}
