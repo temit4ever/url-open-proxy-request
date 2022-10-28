@@ -41,10 +41,6 @@ class ProxyRequest
                 if (!empty($error)) {
                     echo $error . ' with error code: ' . curl_errno($curl);
                 }
-
-                if (!$response) {
-                    continue;
-                }
             }
 
             $parts = explode("\r\n\r\n", $response, 2);
