@@ -50,7 +50,6 @@ class ProxyRequest
                         echo $key . ' with error code: ' . curl_errno($curl) . "\r\n";
                     }
                 }
-                continue;
 
             }
             return $response;
