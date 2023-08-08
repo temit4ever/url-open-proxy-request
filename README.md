@@ -1,4 +1,3 @@
-# iHASCO Technical Challenge
 
 ## Introduction
 
